@@ -2,8 +2,10 @@ from pydantic_settings import SettingsConfigDict, BaseSettings
 
 
 class Settings(BaseSettings):
-    DB_TYPE: str
-    DB_ENGINE: str
+    DB_TYPE_SQLITE: str
+    DB_TYPE_POSTGRESQL: str
+    DB_ENGINE_SQLITE: str
+    DB_ENGINE_POSTGRESQL: str
     DB_USER: str
     DB_PASS: str
     DB_HOST: str
@@ -11,8 +13,13 @@ class Settings(BaseSettings):
     DB_NAME: str
 
     @property
-    def db_url(self):
-        return f"{self.DB_TYPE}+{self.DB_ENGINE}:///{self.DB_NAME}"
+    def db_url_sqlite(self):
+        return f"{self.DB_TYPE_SQLITE}+{self.DB_ENGINE_SQLITE}:///{self.DB_NAME}"
+
+    @property
+    def db_url_postgres(self):
+        return (f"{self.DB_TYPE_POSTGRESQL}+{self.DB_ENGINE_POSTGRESQL}://{self.DB_USER}:{self.DB_PASS}@"
+                f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
 
     model_config = SettingsConfigDict(env_file=".env")
 

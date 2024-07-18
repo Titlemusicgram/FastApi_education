@@ -3,7 +3,7 @@ from config import settings
 from models import Base
 
 
-engine = create_async_engine(settings.db_url)
+engine = create_async_engine(settings.db_url_sqlite)
 session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 
