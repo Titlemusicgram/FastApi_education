@@ -1,17 +1,17 @@
 from pydantic import BaseModel, ConfigDict
 
 
-class STaskAdd(BaseModel):
+class ScmTaskAdd(BaseModel):
     name: str
     description: str | None = None
 
 
-class STask(STaskAdd):
+class ScmTask(ScmTaskAdd):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class STaskId(BaseModel):
+class ScmTaskId(BaseModel):
     ok: bool = True
     task_id: int
