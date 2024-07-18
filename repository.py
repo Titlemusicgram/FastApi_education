@@ -1,24 +1,24 @@
+from database import new_session, TasksOrm
+from schemas import STaskAdd, STask, STaskId
 from sqlalchemy import select
-from database import session_factory
-from models import TaskTable
-from schemas import AddTask
 
 
 class TaskRepository:
     @classmethod
-    async def add_one(cls, data: AddTask) -> int:
-        async with session_factory() as session:
-            task_dict = data.model_dump()
-            task = TaskTable(**task_dict)
+    async def add_one(cls, data: STaskAdd) -> STaskId:
+        async with new_session() as session:
+            task_dist = data.model_dump()
+            task = TasksOrm(**task_dist)
             session.add(task)
             await session.flush()
             await session.commit()
             return task.id
 
     @classmethod
-    async def find_all(cls):
-        async with session_factory() as session:
-            query = select(TaskTable)
+    async def find_all(cls) -> list[STask]:
+        async with new_session() as session:
+            query = select(TasksOrm)
             result = await session.execute(query)
             task_models = result.scalars().all()
-            return task_models
+            task_schemas = [STask.model_validate(task_model) for task_model in task_models]
+            return task_schemas
