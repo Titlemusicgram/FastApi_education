@@ -1,22 +1,11 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
-db_url = "sqlite+aiosqlite:///tasks.db"
-
-engine = create_async_engine(url=db_url)
-new_session = async_sessionmaker(engine, expire_on_commit=False)
+from models import Base
+from config import settings
 
 
-class Base(DeclarativeBase):
-    pass
-
-
-class TTasks(Base):
-    __tablename__ = "tasks"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    description: Mapped[str | None]
+url = settings.db_url_asyncpg
+engine = create_async_engine(url)
+session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def create_tables():
