@@ -1,12 +1,12 @@
-from database import session_factory
 from models import TTask
-from schemas import SAddTask
+from schemas import STaskAdd, STask
+from database import session_factory
 from sqlalchemy import select
 
 
 class TaskRepository:
     @classmethod
-    async def add_one(cls, s_task: SAddTask) -> int:
+    async def add_task(cls, s_task: STaskAdd) -> int:
         async with session_factory() as session:
             task_dict = s_task.model_dump()
             task = TTask(**task_dict)
@@ -16,9 +16,10 @@ class TaskRepository:
             return task.id
 
     @classmethod
-    async def find_all(cls) -> list[TTask]:
+    async def get_tasks(cls) -> list[STask]:
         async with session_factory() as session:
             query = select(TTask)
             result = await session.execute(query)
-            tasks = result.scalars().all()
+            task_models = result.scalars().all()
+            tasks = [STask.validate(task_model) for task_model in task_models]
             return tasks
