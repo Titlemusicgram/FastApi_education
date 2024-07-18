@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from schemas import STaskAdd, STaskId, STask
 from repository import TaskRepository
 
+
 task_router = APIRouter(prefix='/tasks', tags=['Tasks'])
 
 
