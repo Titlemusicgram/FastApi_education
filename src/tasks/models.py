@@ -1,8 +1,5 @@
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
-
-
-class Base(DeclarativeBase):
-    pass
+from sqlalchemy.orm import mapped_column, Mapped
+from src.database import Base
 
 
 class TTask(Base):
